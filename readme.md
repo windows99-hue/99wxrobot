@@ -2,6 +2,7 @@
 ## [English Version](https://github.com/windows99-hue/99wxrobot/blob/main/readme-en.md)
 
 这个程序可以自动查找用户的消息并且做出回答，全自动操作。
+[视频演示](https://www.bilibili.com/video/BV1zH4y1R73R/)
 
 ## 安装
 
