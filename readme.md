@@ -64,6 +64,23 @@ more_help_text = '''
 
 这个是用户向机器人发送help时输出的内容
 
+
+~~~python
+#小机器人
+def get_reply(keyword):
+    try:
+        url = f"https://open.drea.cc/bbsapi/chat/get?keyWord={keyword}&userName=type%3Dbbs"
+        res = requests.get(url)
+        data = res.json()
+        return data['data']['reply']
+    except:
+        return "opps, 我还很笨，不造你在说啥"
+~~~
+
+这个函数是AI机器人的对话生成，你可以自己重新定义，只要最后返回要说的话
+
+`reply`变量是要回答的内容，在程序的主循环里可以更改
+
 ### 插件
 
 请把您要编写的插件放入plugin文件夹，然后在主文件导入您所加入的插件
