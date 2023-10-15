@@ -1,4 +1,5 @@
 # 99微信机器人
+## [English Version](https://github.com/windows99-hue/99wxrobot/blob/main/readme-en.md)
 
 这个程序可以自动查找用户的消息并且做出回答，全自动操作。
 
