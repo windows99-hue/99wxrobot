@@ -126,6 +126,7 @@ except:
 
 keyboard.on_press(exit_for_keyboard)#监听是否按下退格键
 
+print("Copyright: © 2023, windows99-hue. All rights reserved.")
 print("欢迎使用99微信机器人, 运行过程中按下退格键(backspace)可以结束程序, 祝您使用愉快")
 print("监听已开始。。。")
 #死循环查找消息
