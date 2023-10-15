@@ -6,6 +6,8 @@ import sys
 import random
 import re
 
+print("Copyright: © 2023, windows99-hue. All rights reserved.")
+
 wx = WindowControl(Name="微信")
 print(wx)
 exit_status = False
