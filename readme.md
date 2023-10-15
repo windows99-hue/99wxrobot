@@ -45,7 +45,7 @@ help_text = '''
 
 help_text变量是机器人收到第一次发送的消息是回复的话
 
-![image-20231015091909317](E:\99之没事写的小程序\99微信机器人\05-github\content\image-20231015091909317.png)
+![img01](https://github.com/windows99-hue/99wxrobot/blob/main/content/image-20231015091909317.png)
 
 ~~~python
 #更多教程提示
