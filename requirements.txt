@@ -1,3 +1,4 @@
 uiautomation
 requests
 keyboard
+Pillow
