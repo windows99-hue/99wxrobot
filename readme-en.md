@@ -1,4 +1,5 @@
 # 99 WeChat Bot
+## [English Version](https://github.com/windows99-hue/99wxrobot/blob/main/readme-en.md)
 
 This program can automatically detect user messages and provide responses, operating fully autonomously.
 
