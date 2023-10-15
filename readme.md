@@ -45,7 +45,7 @@ help_text = '''
 ~~~
 
 help_text变量是机器人收到第一次发送的消息是回复的话
-<span style="color: red;">注意：</span>请在换行处输入`/n` 这并不是一个错误的换行符，而是程序特有的换行操作的解析符号
+注意：请在换行处输入`/n` 这并不是一个错误的换行符，而是程序特有的换行操作的解析符号
 
 ![img01](https://github.com/windows99-hue/99wxrobot/blob/main/content/image-20231015091909317.png)
 
