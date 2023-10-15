@@ -25,6 +25,7 @@ python main-normal.py
 ```
 
 Please execute this command in your terminal. 99 WeChat Bot is a command-line program, so it's recommended to run it in a terminal. Configure your bot according to your preferences, and press the Backspace key to close the bot.
+### Please make sure to keep WeChat at the top when using it. When using it, you need to have the file transfer assistant display in the conversation box. I suggest you set it to the top.
 
 ### Customizing the Bot
 
