@@ -2,6 +2,7 @@
 ## [中文版](https://github.com/windows99-hue/99wxrobot/blob/main/readme.md)
 
 This program can automatically detect user messages and provide responses, operating fully autonomously.
+[Video](https://www.bilibili.com/video/BV1zH4y1R73R/)
 
 ## Installation
 
@@ -56,6 +57,22 @@ Additional tips include:
 ```
 
 This is the content that will be displayed when a user sends the "help" command to the bot.
+
+
+~~~python
+#小机器人
+def get_reply(keyword):
+    try:
+        url = f"https://open.drea.cc/bbsapi/chat/get?keyWord={keyword}&userName=type%3Dbbs"
+        res = requests.get(url)
+        data = res.json()
+        return data['data']['reply']
+    except:
+        return "opps, 我还很笨，不造你在说啥"
+~~~
+
+This function is the dialogue generation of AI robots, and you can redefine it yourself as long as you return the desired message in the end
+The `reply` variable is the content to be answered and can be changed in the main loop of the program
 
 ### Plugins
 
