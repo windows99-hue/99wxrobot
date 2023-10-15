@@ -50,7 +50,7 @@ CloseClipboard.argtypes = None
 def write_image_to_clip():
 
 
-    response = requests.get("https://api.03c3.cn/zb/")
+    response = requests.get("https://api.03c3.cn/api/zb")
     if response.status_code == 200:
         # 读取图片数据
         image_data = response.content
