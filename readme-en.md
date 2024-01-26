@@ -14,7 +14,7 @@ Then, install the required libraries:
 pip install -r requirements.txt
 ```
 
-<span style="color: red;">Attention：</span>If you believe this installation might conflict with libraries you already have installed, I recommend creating a virtual environment. [Tutorial here]([https://chat.openai.com/c/venv.md](https://github.com/windows99-hue/99wxrobot/blob/main/venv.md)).
+<span style="color: red;">Attention：</span>If you believe this installation might conflict with libraries you already have installed, I recommend creating a virtual environment. [Tutorial here](https://github.com/windows99-hue/99wxrobot/blob/main/venv.md).
 
 ## Usage
 
