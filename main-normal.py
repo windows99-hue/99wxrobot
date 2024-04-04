@@ -290,7 +290,7 @@ while not exit_status:
                 reply = "懒，还没做.."
         
         #调用每日60秒插件
-        elif last_msg == "60秒" or last_msg == "每日60秒" or last_msg == "今日新闻" or last_msg == "day60s" or last_msg == "六十秒" or last_msg == "每日六十秒":
+        elif last_msg == "60秒" or last_msg == "每日60秒" or last_msg == "今日新闻" or last_msg == "day60s" or last_msg == "六十秒" or last_msg == "每日六十秒" or last_msg == "新闻":
             sec60.write_image_to_clip()
             wx.SendKeys("{Ctrl}{v}")
             sender()
