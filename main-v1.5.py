@@ -67,11 +67,18 @@ def exit_for_keyboard(event):#退出程序事件
 
 #检查是不是群聊
 def check_qun():
-    wx2 = WindowControl(Name="聊天信息")
-    lists = wx2.ListControl(Name="聊天成员").GetChildren()
-    if len(lists) >= 3:
+
+    chat_infomation = wx.PaneControl(Name="聊天信息").GetChildren()[1].GetChildren()[0]\
+    .GetChildren()[0].GetChildren()[0].GetChildren()[0].GetChildren()[0].GetChildren()[1]
+
+    print("tryfix_test:"+str(chat_infomation))
+    people_lists = chat_infomation.GetChildren()
+    print(len(people_lists))
+    if len(people_lists) >= 3:
+        print("是群")
         return True
     else:
+        print("不是群")
         return False
     
 #检测会话控件内是否存在被at的提示
