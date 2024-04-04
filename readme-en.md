@@ -41,7 +41,7 @@ Wishing you a wonderful day! 😄
 
 The `help_text` variable is the response when the bot receives its first message.
 
-![image-20231015091909317](file:///E:/%5C99%E4%B9%8B%E6%B2%A1%E4%BA%8B%E5%86%99%E7%9A%84%E5%B0%8F%E7%A8%8B%E5%BA%8F%5C99%E5%BE%AE%E4%BF%A1%E6%9C%BA%E5%99%A8%E4%BA%BA%5C05-github%5Ccontent%5Cimage-20231015091909317.png)
+![image-20231015091909317](https://github.com/windows99-hue/99wxrobot/blob/master/content/image-20231015091909317.png?raw=true)
 
 ```python
 more_help_text = '''
