@@ -56,7 +56,27 @@ This is the content that will be displayed when a user sends the "help" command 
 
 ### Plugins
 
-To add your own plugins, place them in the "plugin" folder and import them into the main file. In the loop where unread messages are checked, add `elif` statements to handle different messages. The `last_msg` variable holds the user's last message, which you can use to formulate responses.
+Place the plugins you want to write into the `plugin` folder. The file name is the plugin name, and the file type is `.py`.
+
+Each plugin must have the **following parts**:
+
+- `main` function, with arbitrary formal parameters, but there must be only one
+- `if` statement to determine the content of the formal variable
+- The return value of the `main` function, which is the content finally output to WeChat
+
+Here is an example program:
+
+```python
+def main(msg):
+    if msg == "插件测试":
+        return "欢迎使用此插件"
+```
+
+The execution order of plugins is determined by the file name. If the detection words of two plugins overlap, the program will take the return value of the first imported (i.e., the plugin with the file name earlier).
+
+Plugins can contain any number of functions, classes, variables, but must **have a `main` function and this function must have a return value**, otherwise the plugin you write will be invalid.
+
+You can refer to the sample plugins in the `plugin` folder.
 
 ### Version Information
 
