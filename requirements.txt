@@ -1,0 +1,4 @@
+uiautomation
+requests
+keyboard
+Pillow
