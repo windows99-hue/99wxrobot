@@ -6,7 +6,7 @@ import sys
 import random
 import os
 
-print("Copyright: © 2023, windows99-hue. All rights reserved.")
+print("Copyright: © 2024, windows99-hue. All rights reserved.")
 
 wx = WindowControl(Name="微信")
 print(wx)
