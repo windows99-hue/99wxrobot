@@ -262,7 +262,7 @@ while not exit_status:
             continue
             
         #教程被触发
-        elif user_name not in help_finished.keys() and False:
+        elif user_name not in help_finished.keys():
             print("教程机制启动")
             '''help_text_ok = help_text.split("/n")
             o = 0
