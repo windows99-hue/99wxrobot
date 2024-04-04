@@ -14,23 +14,7 @@ from plugin import weather99
 #import plugin.sentences99
 from plugin.sentences99 import *
 from plugin import sec60
-
-
-
-
-def start_wx():
-    global wx
-    try:
-        wx = WindowControl(Name="微信")
-    except:
-        print("没有成功获取到微信窗口，请确定窗口已打开且没有被最小化，按Y重试")
-        keyboard.wait("Y")
-        print("try again!")
-        start_wx()
-    else:
-        print("成功获取:",wx)
-
-start_wx()
+import importlib.util
 
 exit_status = False
 my_name = "jiu99"
@@ -57,6 +41,20 @@ more_help_text = '''
 /n
 输入 60秒/六十秒 或 day60s 或 今日新闻 可以获取 每日60秒图片
 '''
+def start_wx():
+    global wx
+    try:
+        wx = WindowControl(Name="微信")
+    except:
+        print("没有成功获取到微信窗口，请确定窗口已打开且没有被最小化，按Y重试")
+        keyboard.wait("Y")
+        print("try again!")
+        start_wx()
+    else:
+        print("成功获取:",wx)
+
+start_wx()
+
 
 #小机器人
 def get_reply(keyword):
@@ -68,6 +66,35 @@ def get_reply(keyword):
     except:
         return "opps, 我还很笨，不造你在说啥"
     
+def load_plugins():
+    plugins_dir = "plugin"
+    plugins = []
+
+    # 遍历 plugin 文件夹
+    for filename in os.listdir(plugins_dir):
+        if filename.endswith(".py") and filename != "__init__.py":
+            plugin_name = os.path.splitext(filename)[0]
+            plugin_path = os.path.join(plugins_dir, filename)
+
+            # 动态导入插件模块
+            spec = importlib.util.spec_from_file_location(plugin_name, plugin_path)
+            plugin_module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(plugin_module)
+
+            # 检查模块中是否有 main 函数
+            if hasattr(plugin_module, "main"):
+                plugins.append(plugin_module)
+
+    return plugins
+
+def run_plugins(plugins,msg):
+    plugin_results = []
+    print("执行插件")
+    for plugin in plugins:
+        result = plugin.main(msg)
+        plugin_results.append(result)
+    return plugin_results
+
 def exit_for_keyboard(event):#退出程序事件
     global exit_status
     if event.event_type == keyboard.KEY_DOWN:
@@ -136,6 +163,11 @@ keyboard.on_press(exit_for_keyboard)#监听是否按下退格键
 
 print("欢迎使用99微信机器人, 运行过程中按下退格键(backspace)可以结束程序, 祝您使用愉快")
 print("监听已开始。。。")
+
+#加载插件
+plugins = load_plugins()
+
+
 #死循环查找消息
 while not exit_status:
     #查找未读消息
@@ -224,6 +256,7 @@ while not exit_status:
         except:
             pass
         
+        ###开始判断输入的信息
 
         #载入并判断机器人黑名单
         if user_name in close_robot:
@@ -317,6 +350,13 @@ while not exit_status:
 
         #如果什么都没匹配，调用小机器人
         print("要回复的内容:",reply)
+
+        #最后判断插件
+        plugin_msg = run_plugins(plugins, last_msg)
+        print(plugin_msg)
+        if plugin_msg != None:
+            reply = plugin_msg[0]
+
         wx.SendKeys(reply)
         wx.SendKeys("{Enter}",waitTime=0)
         #wx.TextControl(SubName=last_msg[:5]).RightClick()
