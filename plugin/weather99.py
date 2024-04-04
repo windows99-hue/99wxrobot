@@ -79,5 +79,18 @@ def show_weather(location):
     else:
         return '请求失败，HTTP响应状态码不为200。为{}，请尽快上报给主人'.format(data["code"])
 
+def main(last_msg):
+    #调用天气插件
+    if last_msg[:4] == "今日天气" or last_msg[:2] == "天气" or last_msg[:7] == "weather":#天气模块
+        response = last_msg.split(" ")
+        print(response)
+        if len(response) == 1:
+            return show_weather("天津")
+        elif len(response) == 2:
+            return show_weather(response[1])
+        else:
+            return "懒，还没做.."
+
+
 if __name__ == "__main__":
     print("此脚本为天气插件，需要与主程序配套使用")

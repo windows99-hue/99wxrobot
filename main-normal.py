@@ -5,16 +5,13 @@ import keyboard
 import sys
 import random
 import os
+import importlib.util
+from plugin.sentences99 import *
 
 print("Copyright: © 2024, windows99-hue. All rights reserved.")
 
 #导入插件
 plugin_path = "./plugin/"
-from plugin import weather99
-#import plugin.sentences99
-from plugin.sentences99 import *
-from plugin import sec60
-import importlib.util
 
 exit_status = False
 my_name = "jiu99"
@@ -92,6 +89,8 @@ def run_plugins(plugins,msg):
     print("执行插件")
     for plugin in plugins:
         result = plugin.main(msg)
+        if result == None:
+            continue
         plugin_results.append(result)
     return plugin_results
 
@@ -263,7 +262,7 @@ while not exit_status:
             continue
             
         #教程被触发
-        elif user_name not in help_finished.keys():
+        elif user_name not in help_finished.keys() and False:
             print("教程机制启动")
             '''help_text_ok = help_text.split("/n")
             o = 0
@@ -306,29 +305,7 @@ while not exit_status:
             wx.SendKeys("{Enter}",waitTime=0)
             hw.TextControl(Name="文件传输助手").Click(simulateMove=False)
             continue
-
-        #调用天气插件
-        elif last_msg[:4] == "今日天气" or last_msg[:2] == "天气" or last_msg[:7] == "weather":#天气模块
-            response = last_msg.split(" ")
-            print(response)
-            if len(response) == 1:
-                split_enter(weather99.show_weather("天津"))
-                sender()
-                continue
-            elif len(response) == 2:
-                split_enter(weather99.show_weather(response[1]))
-                sender()
-                continue
-            else:
-                reply = "懒，还没做.."
-        
-        #调用每日60秒插件
-        elif last_msg == "60秒" or last_msg == "每日60秒" or last_msg == "今日新闻" or last_msg == "day60s" or last_msg == "六十秒" or last_msg == "每日六十秒" or last_msg == "新闻":
-            sec60.write_image_to_clip()
-            wx.SendKeys("{Ctrl}{v}")
-            sender()
-            continue
-
+    
 
         elif last_msg == "[动画表情]":
             reply = "就目前来讲，我还不能看懂表情"
@@ -354,12 +331,15 @@ while not exit_status:
         #最后判断插件
         plugin_msg = run_plugins(plugins, last_msg)
         print(plugin_msg)
-        if plugin_msg != None:
-            reply = plugin_msg[0]
-
-        wx.SendKeys(reply)
+        reply = plugin_msg[0]
+        if "/n" in reply:#如果有需要换行的内容
+            split_enter(reply)
+        elif reply == "%Ctrl+V":
+            wx.SendKeys("{Ctrl}{V}")
+        else:
+            wx.SendKeys(reply)
+        
         wx.SendKeys("{Enter}",waitTime=0)
-        #wx.TextControl(SubName=last_msg[:5]).RightClick()
 
     #点击文件传输助手，初始化
     hw.TextControl(Name="文件传输助手").Click(simulateMove=False)

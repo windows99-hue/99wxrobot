@@ -81,7 +81,11 @@ def write_image_to_clip():
     else:
         print('请求失败，状态码：', response.status_code)
 
-
+def main(last_msg):
+    if last_msg == "60秒" or last_msg == "每日60秒" or last_msg == "今日新闻" or last_msg == "day60s" or last_msg == "六十秒" or last_msg == "每日六十秒" or last_msg == "新闻":
+        write_image_to_clip()
+        last_msg = "%Ctrl+V"
+        return last_msg
 
 
 if __name__ == "__main__":
