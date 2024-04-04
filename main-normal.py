@@ -17,7 +17,7 @@ exit_status = False
 my_name = "jiu99"
 #创建教程完毕的字典，防止重复教程
 help_finished = {}
-close_robot = []
+close_robot = ["八年三班家长群", "八年三班学生群"]
 #初始提示
 help_text = ''' 
 你好呀，主人现在不在，由我接管啦~/n
@@ -331,11 +331,14 @@ while not exit_status:
         #最后判断插件
         plugin_msg = run_plugins(plugins, last_msg)
         print(plugin_msg)
-        reply = plugin_msg[0]
-        if "/n" in reply:#如果有需要换行的内容
-            split_enter(reply)
-        elif reply == "%Ctrl+V":
-            wx.SendKeys("{Ctrl}{V}")
+        if plugin_msg:
+            reply = plugin_msg[0]
+            if "/n" in reply:#如果有需要换行的内容
+                split_enter(reply)
+            elif reply == "%Ctrl+V":
+                wx.SendKeys("{Ctrl}{V}")
+            else:
+                wx.SendKeys(reply)
         else:
             wx.SendKeys(reply)
         
