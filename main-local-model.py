@@ -10,7 +10,7 @@ from plugin.sentences99 import *
 import ollama
 import time
 
-print("Copyright: © 2024, windows99-hue. All rights reserved.")
+print("Copyright: © 2025, windows99-hue. All rights reserved.")
 
 #导入插件
 plugin_path = "./plugin/"
