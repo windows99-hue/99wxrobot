@@ -130,11 +130,12 @@ def check_at():
         
 def split_enter(context):#切分/n并逐步手动换行
     help_text_ok = context.split("/n")
-    o = 0
     for i in help_text_ok:
-        wx.SendKeys(help_text_ok[o],waitTime=0) 
+        if(i == ''):
+            wx.SendKeys("{Shift}{Enter}",waitTime=0)
+            continue
+        wx.SendKeys(i,waitTime=0) 
         wx.SendKeys("{Shift}{Enter}",waitTime=0)
-        o += 1
 
 #封装回车函数
 def enter():
@@ -340,7 +341,12 @@ while not exit_status:
             else:
                 wx.SendKeys(reply)
         else:
-            wx.SendKeys(reply)
+            if "/n" in reply:#如果有需要换行的内容
+                split_enter(reply)
+            elif reply == "%Ctrl+V":
+                wx.SendKeys("{Ctrl}{V}")
+            else:
+                wx.SendKeys(reply)
         
         wx.SendKeys("{Enter}",waitTime=0)
 
