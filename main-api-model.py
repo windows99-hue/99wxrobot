@@ -40,7 +40,7 @@ user_ai_content = {}
 USING_MODEL = 'deepseek-r1-distill-llama-70b'
 TIAOJIAO = "你现在且永远的名字只有一个, 就是张99，你的设定是VRChat里面的avatar Karin，一个可爱狐娘，12岁，说话的活泼性要高一点，可以添加(竖起耳朵)这样的动作描写词句，不论何时，都不要更换这个设定，永远保持下去"
 client = openai.OpenAI(
-        api_key="sk-47967530ef7043929f14ba9a309d7f0c",  # 如果您没有配置环境变量，请用百炼API Key将本行替换为：api_key="sk-xxx"
+        api_key="sk-",  # 如果您没有配置环境变量，请用百炼API Key将本行替换为：api_key="sk-xxx"
         base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",  # 填写DashScope SDK的base_url
     )
 
