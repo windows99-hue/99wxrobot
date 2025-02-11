@@ -4,8 +4,7 @@
 
 2. 运行以下命令来创建虚拟环境（假设你的项目将使用Python 3）：
 
-   ```
-   bashCopy code
+   ```bash
    python3 -m venv venv_name
    ```
 
@@ -13,15 +12,13 @@
 
 3. 激活虚拟环境。在Windows上，使用以下命令：
 
-   ```
-   bashCopy code
+   ```bash
    venv_name\Scripts\activate
    ```
 
    在 macOS 和 Linux 上，使用以下命令：
 
-   ```
-   bashCopy code
+   ```bash
    source venv_name/bin/activate
    ```
 
