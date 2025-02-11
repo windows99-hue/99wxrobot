@@ -2,3 +2,6 @@ uiautomation
 requests
 keyboard
 Pillow
+json
+openai
+ollama

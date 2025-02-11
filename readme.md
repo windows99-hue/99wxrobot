@@ -115,6 +115,10 @@ def main(msg):
 
 `main-normal.py` 是我现在正在使用的版本，非常好用
 
+`main-local-model.py` 可以从本地`ollama`接入deepseek(理论上任何ai都可以)
+
+`main-api-model.py`可以从阿里云百炼接入deepseek的api(理论上任何ai都可以)
+
 ## 特性
 
 ### 优点

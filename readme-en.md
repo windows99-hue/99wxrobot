@@ -84,6 +84,8 @@ You can refer to the sample plugins in the `plugin` folder.
 - `main-low.py` is a historical version that did not handle `@` requests correctly.
 - `main-v1.5.py` is a historical version that correctly handled `@` requests and is lightweight and customizable.
 - `main-normal.py` is the current and highly functional version of the bot.
+- `main-local-model.py` can access DeepSeek from local Ollama (theoretically, any AI can be supported).
+- `main-api-model.py` can access DeepSeek's API from Alibaba Cloud Tianchi (theoretically, any AI can be supported).
 
 ## Features
 
