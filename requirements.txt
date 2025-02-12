@@ -4,3 +4,4 @@ keyboard
 Pillow
 openai
 ollama
+emoji
