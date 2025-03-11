@@ -18,8 +18,7 @@ pip install -r requirements.txt
 
 ### Running the Project:
 
-```
-bashCopy code
+```bash
 python main-normal.py
 ```
 
