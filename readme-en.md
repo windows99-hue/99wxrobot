@@ -99,7 +99,7 @@ You can refer to the sample plugins in the `plugin` folder.
 ### Disadvantages
 
 - Does not support mouse and keyboard control during use.
-- Lacks context awareness.
+- ~~Lacks context awareness.~~
 
 ## License
 
