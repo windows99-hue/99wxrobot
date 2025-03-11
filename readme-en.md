@@ -86,7 +86,7 @@ You can refer to the sample plugins in the `plugin` folder.
 - `main-normal.py` is the current and highly functional version of the bot.
 - `main-local-model.py` can access DeepSeek from local Ollama (theoretically, any AI can be supported).
 - `main-api-model.py` can access DeepSeek's API from Alibaba Cloud Tianchi (theoretically, any AI can be supported).
-- `main-api-model.py` can access deepseek's API through Alibaba Cloud Hundred Refining (theoretically, any AI can be used), modify the content transmission method to streaming transmission to improve response speed, and convert emojis to WeChat expressions.
+- `main-api-model-stream.py` can access deepseek's API through Alibaba Cloud Hundred Refining (theoretically, any AI can be used), modify the content transmission method to streaming transmission to improve response speed, and convert emojis to WeChat expressions.
 
 ## Features
 
