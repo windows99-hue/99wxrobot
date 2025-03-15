@@ -5,3 +5,4 @@ Pillow
 openai
 ollama
 emoji
+clc99
