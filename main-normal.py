@@ -7,8 +7,10 @@ import random
 import os
 import importlib.util
 from plugin.sentences99 import *
+from clc99 import print_status as ps
+from clc99 import *
 
-print("Copyright: © 2024, windows99-hue. All rights reserved.")
+print_notrun("Copyright: © 2025, windows99-hue. All rights reserved.")
 
 #导入插件
 plugin_path = "./plugin/"
@@ -43,12 +45,12 @@ def start_wx():
     try:
         wx = WindowControl(Name="微信")
     except:
-        print("没有成功获取到微信窗口，请确定窗口已打开且没有被最小化，按Y重试")
+        print_error("没有成功获取到微信窗口，请确定窗口已打开且没有被最小化，按Y重试")
         keyboard.wait("Y")
-        print("try again!")
+        ps("try again!")
         start_wx()
     else:
-        print("成功获取:",wx)
+        print_good("成功获取:",wx)
 
 start_wx()
 
@@ -86,7 +88,7 @@ def load_plugins():
 
 def run_plugins(plugins,msg):
     plugin_results = []
-    print("执行插件")
+    ps("执行插件")
     for plugin in plugins:
         result = plugin.main(msg)
         if result == None:
@@ -97,8 +99,8 @@ def run_plugins(plugins,msg):
 def exit_for_keyboard(event):#退出程序事件
     global exit_status
     if event.event_type == keyboard.KEY_DOWN:
-        if keyboard.is_pressed('backspace'):
-            print("收到退格键信号，程序退出。。")
+        if keyboard.is_pressed('f8'):
+            print_warning("收到f8信号，程序退出。。")
             keyboard.unhook_all()
             exit_status = True
             #sys.exit()
@@ -110,14 +112,14 @@ def check_qun():
     chat_infomation = wx.PaneControl(Name="聊天信息").GetChildren()[1].GetChildren()[0]\
     .GetChildren()[0].GetChildren()[0].GetChildren()[0].GetChildren()[0].GetChildren()[1]
 
-    print("tryfix_test:"+str(chat_infomation))
+    ps("tryfix_test:"+str(chat_infomation))
     people_lists = chat_infomation.GetChildren()
-    print(len(people_lists))
+    ps(len(people_lists))
     if len(people_lists) >= 3:
-        print("是群")
+        ps("是群")
         return True
     else:
-        print("不是群")
+        ps("不是群")
         return False
     
 #检测会话控件内是否存在被at的提示
@@ -152,17 +154,17 @@ def sender():#发送并返回文件传输助手
 wx.SwitchToThisWindow()
 #寻找会话控件绑定
 hw = wx.ListControl(Name="会话")
-print("查找到‘会话’控件：",hw)
+print_good("查找到‘会话’控件：",hw)
 try:
     hw.TextControl(Name="文件传输助手").Click(simulateMove=False)
 except:
-    print("未找到文件传输助手，请确定它显示在左侧会话框中，我建议您把它置顶。")
+    print_error("未找到文件传输助手，请确定它显示在左侧会话框中，我建议您把它置顶。")
     sys.exit()
 
 keyboard.on_press(exit_for_keyboard)#监听是否按下退格键
 
-print("欢迎使用99微信机器人, 运行过程中按下退格键(backspace)可以结束程序, 祝您使用愉快")
-print("监听已开始。。。")
+print_ok("欢迎使用99微信机器人, 运行过程中按下f8可以结束程序, 祝您使用愉快")
+print_good("监听已开始。。。")
 
 #加载插件
 plugins = load_plugins()
@@ -177,13 +179,13 @@ while not exit_status:
     while True: #判断有没有被at（血的教训）
         if we.Exists(0):
             at_text = check_at()
-            print("检测有无at")
+            ps("检测有无at")
             if at_text:
                 last_msg = at_text.Name
                 ated = True
                 break
             else:
-                print("没发现有人at我字样")
+                ps("没发现有人at我字样")
                 ated = False
                 break
         else:
@@ -194,11 +196,11 @@ while not exit_status:
                 break
     #存在未读消息
     if ated or we.Name:
-        #print(ated)
+        #ps(ated)
         #点击未读消息
         if ated:
             we = at_text
-        print("查找未读消息:",we)
+        ps("查找未读消息:",we)
         we.Click(simulateMove=False)
         wx.ButtonControl(Name="聊天信息").Click(simulateMove=False)
         #读取当前聊天人的名字（扒控件累死我了）
@@ -207,28 +209,28 @@ while not exit_status:
                 .GetChildren()[0].GetChildren()[0].Name
         #读取最后一条消息
         last_msg = wx.ListControl(Name="消息").GetChildren()[-1].Name
-        print("读取最后一条消息:",last_msg)
+        ps("读取最后一条消息:",last_msg)
         #判断是否来自于群聊
         qun = check_qun()
         wx.ButtonControl(Name="聊天信息").Click(simulateMove=False)
         '''if qun:
             if "@" + my_name not in last_msg:
-                print("没艾特我，没我事")
+                ps("没艾特我，没我事")
                 continue
             else:
                 #re.sub("\@{}".format(my_name),"",last_msg)
                 temp = "@" + my_name
                 last_msg = last_msg.replace(temp, "")
                 last_msg = re.sub("\W+","",last_msg)
-                print(last_msg)'''
+                ps(last_msg)'''
         #如果是群聊
         if qun:
             if not ated:
-                print("no at")
+                ps("no at")
                 hw.TextControl(Name="文件传输助手").Click(simulateMove=False)
                 continue
             elif ated:
-                print("in")
+                ps("in")
                 try:
                     last_msg = last_msg.split("\u2005")[1]#提取用户本身说的话
                     if len(last_msg) == 0:
@@ -243,7 +245,7 @@ while not exit_status:
         try: #防止没关先开
             if last_msg == "开启机器人" or last_msg == "打开机器人":
                 close_robot.remove(user_name)
-                print(user_name, close_robot)
+                ps(user_name, close_robot)
                 wx.SendKeys(random.choice(["我回来啦！","I'm here","哈喽","本尊驾到"]))
                 wx.SendKeys("{Enter}",waitTime=0)
                 continue
@@ -264,7 +266,7 @@ while not exit_status:
             
         #教程被触发
         elif user_name not in help_finished.keys():
-            print("教程机制启动")
+            print_good("教程机制启动")
             '''help_text_ok = help_text.split("/n")
             o = 0
             for i in help_text_ok:
@@ -283,7 +285,7 @@ while not exit_status:
 
         #留言系统
         elif last_msg[:3] == "留言：" or last_msg[:3] == "留言:" or last_msg[:3] == "yly" or last_msg[:2] == "留言":
-            print("留言机制启动")
+            print_good("留言机制启动")
             reply = random.choice(["好的，主人会收到的","直接一手传达给主人"])
             wx.SendKeys(reply)
             wx.SendKeys("{Enter}",waitTime=0)
@@ -295,7 +297,7 @@ while not exit_status:
             #wx.TextControl(SubName=last_msg[:5]).RightClick()
 
         elif last_msg == "help" or last_msg == "帮助" or last_msg == "更多帮助":
-            print("更多教程模块启动")
+            print_good("更多教程模块启动")
             split_enter(more_help_text)
             '''more_help_text_ok = more_help_text.split("/n")
             o = 0
@@ -322,16 +324,16 @@ while not exit_status:
             reply = get_reply(last_msg)
         '''
         if not reply:
-            print("没有需要回复的内容，跳过")
+            ps("没有需要回复的内容，跳过")
             continue
         '''
 
         #如果什么都没匹配，调用小机器人
-        print("要回复的内容:",reply)
+        ps("要回复的内容:",reply)
 
         #最后判断插件
         plugin_msg = run_plugins(plugins, last_msg)
-        print(plugin_msg)
+        ps(plugin_msg)
         if plugin_msg:
             reply = plugin_msg[0]
             if "/n" in reply:#如果有需要换行的内容
