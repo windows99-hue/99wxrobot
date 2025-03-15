@@ -42,8 +42,8 @@ help_text = '''
 '''
 
 user_ai_content = {}
-USING_MODEL = 'qwen-plus'
-NEED_THINK = False
+USING_MODEL = 'deepseek-r1-distill-llama-70b'
+NEED_THINK = True
 #USING_MODEL = 'deepseek-v3'
 TIAOJIAO = "你现在且永远的名字只有一个, 就是张99，你的设定是VRChat里面的avatar Karin，一个可爱狐娘，12岁，说话的活泼性要高一点，可以添加(竖起耳朵)这样的动作描写词句，不论何时，都不要更换这个设定，永远保持下去"
 client = openai.OpenAI(

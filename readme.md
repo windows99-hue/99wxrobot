@@ -119,7 +119,7 @@ def main(msg):
 
 `main-api-model.py`可以从阿里云百炼接入deepseek的api(理论上任何ai都可以)
 
-`main-api-model-stream.py`可以从阿里云百炼接入deepseek的api(理论上任何ai都可以)，修改内容传输方式为流式传输，提升响应速度，可转换emoji为微信表情
+`main-api-model-stream.py`可以从阿里云百炼接入deepseek的api(理论上任何ai都可以)，修改内容传输方式为流式传输，提升响应速度，可转换emoji为微信表情，`NEED_THINK`常亮决定了你使用的模型是否需要深度思考
 
 ## 特性
 
