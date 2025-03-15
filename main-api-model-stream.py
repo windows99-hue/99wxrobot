@@ -42,11 +42,12 @@ help_text = '''
 '''
 
 user_ai_content = {}
-USING_MODEL = 'deepseek-r1-distill-llama-70b'
+USING_MODEL = 'qwen-plus'
+NEED_THINK = False
 #USING_MODEL = 'deepseek-v3'
 TIAOJIAO = "你现在且永远的名字只有一个, 就是张99，你的设定是VRChat里面的avatar Karin，一个可爱狐娘，12岁，说话的活泼性要高一点，可以添加(竖起耳朵)这样的动作描写词句，不论何时，都不要更换这个设定，永远保持下去"
 client = openai.OpenAI(
-        api_key="",  # 如果您没有配置环境变量，请用百炼API Key将本行替换为：api_key="sk-xxx"
+        api_key="sk-",  # 如果您没有配置环境变量，请用百炼API Key将本行替换为：api_key="sk-xxx"
         base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",  # 填写DashScope SDK的base_url
     )
 
@@ -123,9 +124,9 @@ def get_reply(keyword, user_name):
     enter()
     for chunk in completion:
         if not json.loads(chunk.model_dump_json())['choices'][0]['delta']['content'] and json.loads(chunk.model_dump_json())['choices'][0]['finish_reason'] == None and 'r1' in USING_MODEL:
-            ps(".",end='')
+            print(".",end='')
         if json.loads(chunk.model_dump_json())['choices'][0]['finish_reason'] == "stop":
-            ps("")
+            print("")
             ps("输出结束")
             user_ai_content[user_name].append({ #存储用户要发送的信息
                 'role': 'assistant',
@@ -133,16 +134,17 @@ def get_reply(keyword, user_name):
             })
             total_reply = ''
             break
-        if 'r1' in USING_MODEL:
+        if 'r1' in USING_MODEL or NEED_THINK:
             reply_part = json.loads(chunk.model_dump_json())['choices'][0]['delta']['content']
-        elif 'v3' in USING_MODEL:
+        elif 'v3' in USING_MODEL or not NEED_THINK:
             reply_part = json.loads(chunk.model_dump_json())['choices'][0]['delta']['content']
         if reply_part == None:
             continue
         reply_part = reply_part.replace('\n', '/n') # 处理部分回复的回车
         reply_part = emoji_to_wechat_emoji(reply_part) #处理emoji为微信表情
         total_reply += reply_part
-        ps(reply_part,end='')
+        #ps(end='')
+        print(reply_part,end='')
         if(reply_part == ''):
             continue
         split_enter_for_stream(reply_part)
