@@ -256,9 +256,9 @@ except:
     print("未找到文件传输助手，请确定它显示在左侧会话框中，我建议您把它置顶。")
     sys.exit()
 
-keyboard.on_press(exit_for_keyboard)#监听是否按下退格键
+keyboard.on_press(exit_for_keyboard)#监听是否按下f8
 
-print("欢迎使用99微信机器人, 运行过程中按下退格键(backspace)可以结束程序, 祝您使用愉快")
+print("欢迎使用99微信机器人, 运行过程中按下f8可以结束程序, 祝您使用愉快")
 print("监听已开始。。。")
 
 #加载插件
