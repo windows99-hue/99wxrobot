@@ -103,7 +103,7 @@ You can refer to the sample plugins in the `plugin` folder.
 
 ## License
 
-This project is licensed under the [MIT License](https://chat.openai.com/c/LICENSE).  I don't want this program to be commercial. If you want to use this code for commercial purposes, please contact me
+This project is licensed under the [GPLv3 License](https://chat.openai.com/c/LICENSE).  I don't want this program to be commercial. If you want to use this code for commercial purposes, please contact me
 3013907412@qq.com
 thanks
 
