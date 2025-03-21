@@ -9,6 +9,7 @@ import importlib.util
 from plugin.sentences99 import *
 from clc99 import print_status as ps
 from clc99 import *
+from clickapi import LeftClick
 
 print_notrun("Copyright: © 2025, windows99-hue. All rights reserved.")
 
@@ -108,7 +109,7 @@ def exit_for_keyboard(event):#退出程序事件
 
 #检查是不是群聊
 def check_qun():
-
+    time.sleep(0.2)
     chat_infomation = wx.PaneControl(Name="聊天信息").GetChildren()[1].GetChildren()[0]\
     .GetChildren()[0].GetChildren()[0].GetChildren()[0].GetChildren()[0].GetChildren()[1]
 
@@ -148,15 +149,17 @@ def shiftenter():
 
 def sender():#发送并返回文件传输助手
     wx.SendKeys("{Enter}",waitTime=0)
-    hw.TextControl(Name="文件传输助手").Click(simulateMove=False)
+    #hw.TextControl(Name="文件传输助手").Click(simulateMove=False)
+    LeftClick(wx, hw.TextControl(Name="文件传输助手"))
     
 #切换窗口(置顶)
-wx.SwitchToThisWindow()
+#wx.SwitchToThisWindow()
 #寻找会话控件绑定
 hw = wx.ListControl(Name="会话")
 print_good("查找到‘会话’控件：",hw)
 try:
-    hw.TextControl(Name="文件传输助手").Click(simulateMove=False)
+    #hw.TextControl(Name="文件传输助手").Click(simulateMove=False)
+    LeftClick(wx, hw.TextControl(Name="文件传输助手"))
 except:
     print_error("未找到文件传输助手，请确定它显示在左侧会话框中，我建议您把它置顶。")
     sys.exit()
@@ -201,8 +204,10 @@ while not exit_status:
         if ated:
             we = at_text
         ps("查找未读消息:",we)
-        we.Click(simulateMove=False)
-        wx.ButtonControl(Name="聊天信息").Click(simulateMove=False)
+        #we.Click(simulateMove=False)
+        LeftClick(wx,we)
+        #wx.ButtonControl(Name="聊天信息").Click(simulateMove=False)
+        LeftClick(wx, wx.ButtonControl(Name="聊天信息"))
         #读取当前聊天人的名字（扒控件累死我了）
         user_name = wx.ListControl(Name="消息").GetParentControl().GetParentControl().GetParentControl()\
             .GetParentControl().GetChildren()[0].GetChildren()[0].GetChildren()[1].GetChildren()[0].GetChildren()[0]\
@@ -212,7 +217,8 @@ while not exit_status:
         ps("读取最后一条消息:",last_msg)
         #判断是否来自于群聊
         qun = check_qun()
-        wx.ButtonControl(Name="聊天信息").Click(simulateMove=False)
+        #wx.ButtonControl(Name="聊天信息").Click(simulateMove=False)
+        LeftClick(wx, wx.ButtonControl(Name="聊天信息"))
         '''if qun:
             if "@" + my_name not in last_msg:
                 ps("没艾特我，没我事")
@@ -227,7 +233,8 @@ while not exit_status:
         if qun:
             if not ated:
                 ps("no at")
-                hw.TextControl(Name="文件传输助手").Click(simulateMove=False)
+                #hw.TextControl(Name="文件传输助手").Click(simulateMove=False)
+                LeftClick(wx, hw.TextControl(Name="文件传输助手"))
                 continue
             elif ated:
                 ps("in")
@@ -289,7 +296,8 @@ while not exit_status:
             reply = random.choice(["好的，主人会收到的","直接一手传达给主人"])
             wx.SendKeys(reply)
             wx.SendKeys("{Enter}",waitTime=0)
-            hw.TextControl(Name="文件传输助手").Click(simulateMove=False)
+            #hw.TextControl(Name="文件传输助手").Click(simulateMove=False)
+            LeftClick(hw.TextControl(Name="文件传输助手"))
             wx.SendKeys(str(user_name)+" 给您留言了: "+str(last_msg[3:]))
             wx.SendKeys("{Enter}",waitTime=0)
             continue
@@ -306,7 +314,8 @@ while not exit_status:
                 wx.SendKeys("{Shift}{Enter}",waitTime=0)
                 o += 1'''
             wx.SendKeys("{Enter}",waitTime=0)
-            hw.TextControl(Name="文件传输助手").Click(simulateMove=False)
+            #hw.TextControl(Name="文件传输助手").Click(simulateMove=False)
+            LeftClick(wx, hw.TextControl(Name="文件传输助手"))
             continue
     
 
@@ -353,7 +362,8 @@ while not exit_status:
         wx.SendKeys("{Enter}",waitTime=0)
 
     #点击文件传输助手，初始化
-    hw.TextControl(Name="文件传输助手").Click(simulateMove=False)
+    #hw.TextControl(Name="文件传输助手").Click(simulateMove=False)
+    LeftClick(wx, hw.TextControl(Name="文件传输助手"))
 
 
         
