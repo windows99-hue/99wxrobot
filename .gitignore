@@ -1,4 +1,4 @@
 @AutomationLog.txt
 __pycache__
 plugin/__pycache__/*
-plugin/(.py)
+plugin/*
