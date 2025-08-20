@@ -44,12 +44,7 @@ def RightClick(wx, rect):
     hwnd, rl, rt = GetInfo(wx, rect)
     rightClick(hwnd,rl,rt)
 
-# wx = WindowControl(Name="微信")
-# hw = wx.ListControl(Name="会话")
-# LeftClick(wx, hw.TextControl(Name="家"))
-# bt = wx.ButtonControl(Name="聊天信息")
-# print(bt)
-# time.sleep(0.1)
-# LeftClick(wx, bt)
-
-#rightClick(hwnd,relative_left,relative_top)
+wx = WindowControl(Name="微信")
+hw = wx.ListControl(Name="会话")
+print(hw)
+LeftClick(wx, hw.ListItemControl(Name="文件传输助手 已置顶 [视频] RealityMOD已上架meta quest商店，免费下载 01:29"))

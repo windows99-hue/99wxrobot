@@ -13,6 +13,7 @@ import emoji
 from emoji_to_wechat import etw
 from clc99 import print_status as ps
 from clc99 import *
+import re
 
 initsystem()
 
@@ -21,7 +22,7 @@ print_notrun("Copyright: © 2025, windows99-hue. All rights reserved.")
 plugin_path = "./plugin/"
 
 exit_status = False
-my_name = "jy9"
+my_name = "jy9999999999" #请修改为您的微信名称
 #创建教程完毕的字典，防止重复教程
 help_finished = {}
 close_robot = []
@@ -41,13 +42,14 @@ help_text = '''
 请谅解, 祝您天天开心/n
 '''
 
+
 user_ai_content = {}
 USING_MODEL = 'deepseek-r1-distill-llama-70b'
 NEED_THINK = True
 #USING_MODEL = 'deepseek-v3'
 TIAOJIAO = "你现在且永远的名字只有一个, 就是张99，你的设定是VRChat里面的avatar Karin，一个可爱狐娘，12岁，说话的活泼性要高一点，可以添加(竖起耳朵)这样的动作描写词句，不论何时，都不要更换这个设定，永远保持下去"
 client = openai.OpenAI(
-        api_key="sk-",  # 如果您没有配置环境变量，请用百炼API Key将本行替换为：api_key="sk-xxx"
+      # 如果您没有配置环境变量，请用百炼API Key将本行替换为：api_key="sk-xxx",
         base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",  # 填写DashScope SDK的base_url
     )
 
@@ -62,10 +64,18 @@ more_help_text = '''
 当您想更换话题时, 请务必对张99说: 换话题 或者 清除上下文/n
 否则被99发现了, 后果嘛, 啧啧啧啧~/n
 '''
+
+#非用户列表
+unuser = ["公众号","微信运动","微信团队","微信支付","服务号","微信游戏","服务通知"]
+
+unread_pattern = r'\s\d+条未读\s'
+unnotice_pattern = r'\s\d{2}:\d{2}消息免打扰'
+
 def start_wx():
     global wx
     try:
         wx = WindowControl(Name="微信")
+        wx.SetFocus()
     except:
         print_error("没有成功获取到微信窗口，请确定窗口已打开且没有被最小化，按Y重试")
         keyboard.wait("Y")
@@ -87,18 +97,6 @@ def emoji_to_wechat_emoji(text):
 
     return text
 
-
-#小机器人
-# def get_reply(keyword):
-#     try:
-#         url = f"https://open.drea.cc/bbsapi/chat/get?keyWord={keyword}&userName=type%3Dbbs"
-#         res = requests.get(url)
-#         data = res.json()
-#         return data['data']['reply']
-#     except:
-#         return "opps, 我还很笨，不造你在说啥"
-
-
 #重写get_reply 对接到api
 def get_reply(keyword, user_name):
     total_reply = ''
@@ -108,7 +106,6 @@ def get_reply(keyword, user_name):
                 'role': 'system',
                 'content': TIAOJIAO
             })
-    ps(user_ai_content[user_name])
     user_ai_content[user_name].append({ #存储用户要发送的信息
             'role': 'user',
             'content': keyword
@@ -192,26 +189,21 @@ def exit_for_keyboard(event):#退出程序事件
 
 #检查是不是群聊
 def check_qun():
-
-    chat_infomation = wx.PaneControl(Name="聊天信息").GetChildren()[1].GetChildren()[0]\
-    .GetChildren()[0].GetChildren()[0].GetChildren()[0].GetChildren()[0].GetChildren()[1]
-
-    ps("tryfix_test:"+str(chat_infomation))
-    people_lists = chat_infomation.GetChildren()
-    ps(len(people_lists))
-    if len(people_lists) >= 3:
-        ps("是群")
+    time.sleep(0.1)
+    try:
+        chat_infomation = wx.GetChildren()[0].GetChildren()[0].GetChildren()[0]\
+        .GetChildren()[2].GetChildren()[1].GetChildren()[0].\
+        GetChildren()[0].GetChildren()[0].GetChildren()[0].GetChildren()[1].GetChildren()[1].GetChildren()[0].\
+        GetChildren()[0].GetChildren()[0].GetChildren()[0]
+    except IndexError:
         return True
-    else:
-        ps("不是群")
-        return False
+    return False
     
 #检测会话控件内是否存在被at的提示
 def check_at():
     check_at_list = hw.GetChildren()
-    for i in check_at_list:
-        at_text = i.GetChildren()[0].GetChildren()[1].GetChildren()[1].TextControl()
-        if "[有人@我]" in at_text.Name and at_text.Name[:6] == "[有人@我]":
+    for at_text in check_at_list:
+        if "[有人@我]" in at_text.Name.split():
             return at_text
         
 def split_enter(context):#切分/n并逐步手动换行
@@ -249,105 +241,127 @@ def shiftenter():
 
 def sender():#发送并返回文件传输助手
     wx.SendKeys("{Enter}",waitTime=0)
-    hw.TextControl(Name="文件传输助手").Click(simulateMove=False)
+    filehelper.Click(simulateMove=False)
     
 #切换窗口(置顶)
 wx.SwitchToThisWindow()
 #寻找会话控件绑定
 hw = wx.ListControl(Name="会话")
 print_good("查找到‘会话’控件：",hw)
+get_filehelper = False
+for filehelper in hw.GetChildren():
+    name = filehelper.Name.split(" ")[0]
+    if name == "文件传输助手":
+        get_filehelper = True
+        print_good("找到文件传输助手:",filehelper)
+        break
+
+if not get_filehelper:
+    print_error("没有找到文件传输助手，请确定它显示在左侧会话框中，我建议您把它置顶。")
+    sys.exit(1)
+
 try:
-    hw.TextControl(Name="文件传输助手").Click(simulateMove=False)
+    filehelper.Click(simulateMove=False)
 except:
-    print_error("未找到文件传输助手，请确定它显示在左侧会话框中，我建议您把它置顶。")
+    print_error("无法切换至文件传输助手，请确定它显示在左侧会话框中，我建议您把它置顶。")
     sys.exit()
 
 keyboard.on_press(exit_for_keyboard)#监听是否按下f8
 
-print_ok("欢迎使用99微信机器人, 运行过程中按下f8可以结束程序, 祝您使用愉快")
-print_good("监听已开始。。。")
-
 #加载插件
 plugins = load_plugins()
+print_good("插件加载完成！")
 
+print_ok("欢迎使用99微信机器人, 运行过程中按下f8可以结束程序, 祝您使用愉快")
+print_good("监听已开始。。。")
 
 #死循环查找消息
 while not exit_status:
     #查找未读消息
-    we = hw.TextControl(searchDepth=4)
     ated = False
+    newmessage = None
 
-    while True: #判断有没有被at（血的教训）
-        if we.Exists(0):
-            at_text = check_at()
-            ps("检测有无at")
-            if at_text:
-                last_msg = at_text.Name
-                ated = True
+    while True:
+        #查找未读消息
+        we = hw.GetChildren()
+        get_new_message = False
+        for i in we:
+            if re.search(unread_pattern, i.Name):
+                get_new_message = True
+                newmessage = i
+                at_text = check_at()
+                if at_text:
+                    ated = True
                 break
-            else:
-                ps("没发现有人at我字样")
-                ated = False
-                break
-        else:
-            at_text = check_at()
-            if at_text:
-                last_msg = at_text.Name
-                ated = True
-                break
+        if get_new_message: break
     #存在未读消息
-    if ated or we.Name:
+    if ated or newmessage:
         #ps(ated)
         #点击未读消息
         if ated:
             we = at_text
-        ps("查找未读消息:",we)
+        else:
+            we = newmessage
+        ps("发现未读消息:",we.Name)
         we.Click(simulateMove=False)
-        wx.ButtonControl(Name="聊天信息").Click(simulateMove=False)
-        time.sleep(0.15)
         #读取当前聊天人的名字（扒控件累死我了）
-        user_name = wx.ListControl(Name="消息").GetParentControl().GetParentControl().GetParentControl()\
-            .GetParentControl().GetChildren()[0].GetChildren()[0].GetChildren()[1].GetChildren()[0].GetChildren()[0]\
-                .GetChildren()[0].GetChildren()[0].Name
+        try:
+            user_name = wx.GetChildren()[0].GetChildren()[0].GetChildren()[0].GetChildren()[2].GetChildren()[1].GetChildren()[0].\
+            GetChildren()[0].GetChildren()[0].GetChildren()[0].GetChildren()[1].GetChildren()[1].GetChildren()[0].GetChildren()[0].\
+            GetChildren()[0].GetChildren()[0].Name
+        except:
+            ps("非正常用户，跳过")
+            filehelper.Click(simulateMove=False)
+            continue
+
+        if re.search(unnotice_pattern, we.Name):
+            ps("免打扰用户")
+            if we.Name not in close_robot:
+                ps("加入黑名单")
+                close_robot.append(user_name)
+                filehelper.Click(simulateMove=False)
+                continue
+
+        chat_info_button = wx.ButtonControl(Name="聊天信息")
+        chat_info_button.Click(simulateMove=False)
         #读取最后一条消息
         last_msg = wx.ListControl(Name="消息").GetChildren()[-1].Name
+        last_msg = last_msg[:-2] #去除微信4.0的末尾换行符
         ps("读取最后一条消息:",last_msg)
         #判断是否来自于群聊
         qun = check_qun()
-        wx.ButtonControl(Name="聊天信息").Click(simulateMove=False)
-        '''if qun:
-            if "@" + my_name not in last_msg:
-                ps("没艾特我，没我事")
-                continue
-            else:
-                #re.sub("\@{}".format(my_name),"",last_msg)
-                temp = "@" + my_name
-                last_msg = last_msg.replace(temp, "")
-                last_msg = re.sub("\W+","",last_msg)
-                ps(last_msg)'''
+        chat_info_button.Click(simulateMove=False)
         #如果是群聊
         if qun:
             if not ated:
-                ps("no at")
-                hw.TextControl(Name="文件传输助手").Click(simulateMove=False)
+                ps("没at我，没我事")
+                filehelper.Click(simulateMove=False)
                 continue
             elif ated:
-                ps("in")
                 try:
-                    last_msg = last_msg.split("\u2005")[1]#提取用户本身说的话
-                    if len(last_msg) == 0:
+                    # 使用正则表达式移除所有@jiu99（可以根据实际机器人ID调整）
+                    cleaned_msg = re.sub(r'@{}\s*'.format(my_name), '', last_msg).strip()
+                    
+                    if len(cleaned_msg) == 0:
                         reply = "别光at我呀，如果有不会使用的地方，请您看一下教程提示哦~"
-                except IndexError:
+                    else:
+                        last_msg = cleaned_msg
+                        print(last_msg)
+                except Exception as e:
                     reply = "别光at我呀，如果有不会使用的地方，请您看一下教程提示哦~"
+            
             
 
         #判断关键字
         #先判断是否关闭
         reply = None
+
+        input_area = wx.EditControl(Name=user_name)
+        input_area.Click(simulateMove=False)
+
         try: #防止没关先开
             if last_msg == "开启机器人" or last_msg == "打开机器人":
                 close_robot.remove(user_name)
-                ps(user_name, close_robot)
                 wx.SendKeys(random.choice(["我回来啦！","I'm here","哈喽","本尊驾到"]))
                 wx.SendKeys("{Enter}",waitTime=0)
                 continue
@@ -364,17 +378,12 @@ while not exit_status:
 
         #载入并判断机器人黑名单
         if user_name in close_robot:
+            filehelper.Click(simulateMove=False)
             continue
             
         #教程被触发
         elif user_name not in help_finished.keys():
             print_good("教程机制启动")
-            '''help_text_ok = help_text.split("/n")
-            o = 0
-            for i in help_text_ok:
-                wx.SendKeys(help_text_ok[o],waitTime=0) 
-                wx.SendKeys("{Shift}{Enter}",waitTime=0)
-                o += 1'''
             split_enter(help_text)
             wx.SendKeys("{Enter}",waitTime=0)
             help_finished[user_name] = True
@@ -383,7 +392,6 @@ while not exit_status:
             wx.SendKeys("主人干什么去了：{}".format(master_doing))
             enter()
             wx.SendKeys("当前挂载模型:{}".format(ai_model_name))
-            #hw.TextControl(Name="文件传输助手").Click(simulateMove=False)
             sender()
             continue
 
@@ -393,28 +401,21 @@ while not exit_status:
             reply = random.choice(["好的，主人会收到的","直接一手传达给主人"])
             wx.SendKeys(reply)
             wx.SendKeys("{Enter}",waitTime=0)
-            hw.TextControl(Name="文件传输助手").Click(simulateMove=False)
+            filehelper.Click(simulateMove=False)
             wx.SendKeys(str(user_name)+" 给您留言了: "+str(last_msg[3:]))
             wx.SendKeys("{Enter}",waitTime=0)
             continue
             
-            #wx.TextControl(SubName=last_msg[:5]).RightClick()
 
         elif last_msg == "help" or last_msg == "帮助" or last_msg == "更多帮助":
             print_good("更多教程模块启动")
             split_enter(more_help_text)
-            '''more_help_text_ok = more_help_text.split("/n")
-            o = 0
-            for i in more_help_text_ok:
-                wx.SendKeys(more_help_text_ok[o],waitTime=0) 
-                wx.SendKeys("{Shift}{Enter}",waitTime=0)
-                o += 1'''
             wx.SendKeys("{Enter}",waitTime=0)
-            hw.TextControl(Name="文件传输助手").Click(simulateMove=False)
+            filehelper.Click(simulateMove=False)
             continue
     
 
-        elif last_msg == "[动画表情]":
+        elif last_msg == "动画表":
             reply = "就目前来讲，我还不能看懂表情"
 
 
@@ -434,11 +435,6 @@ while not exit_status:
 
         else:
             reply = "@@@GO_TO_AI@@@"
-        '''
-        if not reply:
-            ps("没有需要回复的内容，跳过")
-            continue
-        '''
 
         #如果什么都没匹配，调用小机器人
         if not reply == "@@@GO_TO_AI@@@":
@@ -446,7 +442,6 @@ while not exit_status:
 
         #最后判断插件
         plugin_msg = run_plugins(plugins, last_msg)
-        ps(plugin_msg)
         if plugin_msg:
             reply = plugin_msg[0]
             if "/n" in reply:#如果有需要换行的内容
@@ -468,7 +463,7 @@ while not exit_status:
         wx.SendKeys("{Enter}",waitTime=0)
 
     #点击文件传输助手，初始化
-    hw.TextControl(Name="文件传输助手").Click(simulateMove=False)
+    filehelper.Click(simulateMove=False)
 
 
         
