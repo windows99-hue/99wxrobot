@@ -1,4 +1,4 @@
-# 99 WeChat Bot
+# 99 WeChat Bot v2.0
 
 This program can automatically detect user messages and provide responses, operating fully autonomously.
 
