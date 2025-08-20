@@ -37,7 +37,7 @@ Before use, please follow these steps:
 shell
 
 ```
-setx API_API_KEY "YOUR_API_KEY"
+setx OPENAI_API_KEY "YOUR_API_KEY"
 ```
 
 1. Open a new `CMD` or restart your editor for the environment variables to take effect.

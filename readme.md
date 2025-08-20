@@ -43,7 +43,7 @@ python main-normal.py
 1. windows系统中，在`CMD`中运行以下命令，请将`YOUR_API_KEY`替换为你的apikey，通常以`sk-`开头
 
 ~~~shell
-setx API_API_KEY "YOUR_API_KEY"
+setx OPENAI_API_KEY "YOUR_API_KEY"
 ~~~
 
 2. 重新打开一个`CMD`或者重启您的编辑器使环境变量生效
