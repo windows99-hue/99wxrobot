@@ -2,6 +2,8 @@
 
 This program can automatically detect user messages and provide responses, operating fully autonomously.
 
+[Video Demo](https://www.bilibili.com/video/BV1zH4y1R73R/)
+
 ## Installation
 
 Download the source code or clone this repository.
@@ -23,6 +25,31 @@ python main-normal.py
 ```
 
 Please execute this command in your terminal. 99 WeChat Bot is a command-line program, so it's recommended to run it in a terminal. Configure your bot according to your preferences, and press the Backspace key to close the bot.
+
+### About `main-api-model-stream.py`
+
+This version implements streaming transmission of AI-generated text from the LLM API to WeChat. For security, 99wxrobot2.0 uses environment variables to store the `apikey`.
+
+Before use, please follow these steps:
+
+1. In Windows systems, run the following command in `CMD`, replacing `YOUR_API_KEY` with your actual API key (usually starting with `sk-`):
+
+shell
+
+```
+setx API_API_KEY "YOUR_API_KEY"
+```
+
+1. Open a new `CMD` or restart your editor for the environment variables to take effect.
+2. Run:
+
+shell
+
+```
+python main-api-model-stream.py
+```
+
+The program should work automatically.
 
 ### Customizing the Bot
 
@@ -53,6 +80,25 @@ Additional tips include:
 
 This is the content that will be displayed when a user sends the "help" command to the bot.
 
+```python
+def get_reply(keyword):
+    try:
+        url = f"https://open.drea.cc/bbsapi/chat/get?keyWord={keyword}&userName=type%3Dbbs"
+        res = requests.get(url)
+        data = res.json()
+        return data['data']['reply']
+    except:
+        return "Oops, I'm still quite笨 (dumb), not sure what you're saying"
+```
+
+This function generates the dialogue for the AI robot. You can redefine it yourself, as long as it returns what to say at the end.
+
+The `reply` variable is the content to respond with, which can be modified in the main loop of the program.
+
+Please **change** the `my_name` variable in the program to your WeChat name, **not** your WeChat ID.
+
+In the **streaming transmission version**, the variable `TIAOJIAO` is the identity setting of the LLM, which you can change as needed.
+
 ### Plugins
 
 Place the plugins you want to write into the `plugin` folder. The file name is the plugin name, and the file type is `.py`.
@@ -79,13 +125,9 @@ You can refer to the sample plugins in the `plugin` folder.
 
 ### Version Information
 
-- `main-v0.5.py` is the initial version of the bot but contains numerous bugs. It is not recommended for modification or use.
-- `main-low.py` is a historical version that did not handle `@` requests correctly.
-- `main-v1.5.py` is a historical version that correctly handled `@` requests and is lightweight and customizable.
-- `main-normal.py` is the current and highly functional version of the bot.
-- `main-local-model.py` can access DeepSeek from local Ollama (theoretically, any AI can be supported).
-- `main-api-model.py` can access DeepSeek's API from Alibaba Cloud Tianchi (theoretically, any AI can be supported).
-- `main-api-model-stream.py` can access deepseek's API through Alibaba Cloud Hundred Refining (theoretically, any AI can be used), modify the content transmission method to streaming transmission to improve response speed, and convert emojis to WeChat expressions.The constant brightness of `NEED_THINK` determines whether the model you are using requires deep thinking
+`main-normal.py` is the normal version.
+
+`main-api-model-stream.py` can access deepseek's API from Alibaba Cloud Bailian (theoretically any AI can be used), modify the content transmission method to streaming transmission, improve response speed, and convert emojis to WeChat expressions. The `NEED_THINK` constant determines whether the model you are using requires deep thinking. This is the version I am currently using.
 
 ## Features
 
@@ -98,8 +140,7 @@ You can refer to the sample plugins in the `plugin` folder.
 
 ### Disadvantages
 
-- Does not support mouse and keyboard control during use.
-- ~~Lacks context awareness.~~
+- Does not support mouse and keyboard control during use.You can try using a virtual machine.
 
 ## License
 

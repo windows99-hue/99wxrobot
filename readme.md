@@ -1,8 +1,12 @@
-# 99微信机器人
+# 99微信机器人 v2.0
 
 这个程序可以自动查找用户的消息并且做出回答，全自动操作。
 
 [视频演示](https://www.bilibili.com/video/BV1zH4y1R73R/)
+
+## 写在前面
+
+由于微信进行了4.0大版本更新，`master`分支的程序已失效并停止支持，建议使用本程序
 
 ## 安装
 
@@ -29,6 +33,27 @@ python main-normal.py
 请在终端执行这行代码，99微信机器人是一个命令行程序，因此建议您在终端执行这行代码
 
 请根据程序配置您的机器人，按下 退格键 关闭机器人
+
+### 关于`main-api-model-stream.py`
+
+该版本实现了从LLM api流失传输ai生成的文字并转发到微信，为了安全，99wxrobot2.0使用了环境变量来存储`apikey`
+
+在使用前，请遵循如下步骤
+
+1. windows系统中，在`CMD`中运行以下命令，请将`YOUR_API_KEY`替换为你的apikey，通常以`sk-`开头
+
+~~~shell
+setx API_API_KEY "YOUR_API_KEY"
+~~~
+
+2. 重新打开一个`CMD`或者重启您的编辑器使环境变量生效
+3. 运行
+
+~~~shell
+python main-api-model-stream.py
+~~~
+
+程序应该会自动工作
 
 ### 自定义机器人
 
@@ -81,6 +106,10 @@ def get_reply(keyword):
 
 `reply`变量是要回答的内容，在程序的主循环里可以更改
 
+请修改程序中的`my_name`变量为您的微信名称，**不是**微信号
+
+在**流失传输版本**中，变量`TIAOJIAO`是LLM的身份设定，您可以自行更改
+
 ### 插件
 
 请把您要编写的插件放入plugin文件夹，文件名称就是插件名称，文件类型为.py
@@ -107,19 +136,9 @@ def main(msg):
 
 ### 版本介绍
 
-`main-v0.5.py` 是我最初创建的机器人，但是它bug很多，我不建议您更改或使用这个版本
+`main-normal.py` 是正常版本
 
-`main-low.py` 是一个记录版本，它没有正确处理被at的请求
-
-`main-v1.5.py` 是一个记录版本，这个版本正常处理了at请求，并且很轻量化，您可以自定义这个版本
-
-`main-normal.py` 是我现在正在使用的版本，非常好用
-
-`main-local-model.py` 可以从本地`ollama`接入deepseek(理论上任何ai都可以)
-
-`main-api-model.py`可以从阿里云百炼接入deepseek的api(理论上任何ai都可以)
-
-`main-api-model-stream.py`可以从阿里云百炼接入deepseek的api(理论上任何ai都可以)，修改内容传输方式为流式传输，提升响应速度，可转换emoji为微信表情，`NEED_THINK`常亮决定了你使用的模型是否需要深度思考
+`main-api-model-stream.py`可以从阿里云百炼接入deepseek的api(理论上任何ai都可以)，修改内容传输方式为流式传输，提升响应速度，可转换emoji为微信表情，`NEED_THINK`常量决定了你使用的模型是否需要深度思考，我正在使用的版本
 
 ## 特性
 
@@ -132,8 +151,7 @@ def main(msg):
 
 ### 缺点
 
-- 在使用过程中不能操控鼠标键盘
-- ~~没有上下文功能（可自行编写）~~
+- 在使用过程中不能操控鼠标键盘，可以尝试虚拟机
 
 ## 许可证
 
