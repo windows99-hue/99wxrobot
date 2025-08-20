@@ -1,5 +1,7 @@
 # 99 WeChat Bot
 
+# This program only supports WeChat version 3, the latest version 4 is on the `wx4` branch, and the `master` branch has stopped supporting it
+
 This program can automatically detect user messages and provide responses, operating fully autonomously.
 
 ## Installation
