@@ -1,5 +1,5 @@
 #coding:utf-8
-from uiautomation import WindowControl, MenuControl
+from uiautomation import WindowControl, MenuControl, ToolBarControl
 import requests
 import keyboard
 import sys
@@ -11,7 +11,7 @@ from clc99 import print_status as ps
 from clc99 import *
 import re
 
-print_notrun("Copyright: © 2025, windows99-hue. All rights reserved.")
+print_notrun("Copyright: © 2026, windows99-hue. All rights reserved.")
 
 #导入插件
 plugin_path = "./plugin/"
@@ -45,7 +45,7 @@ more_help_text = '''
 #非用户列表
 unuser = ["公众号","微信运动","微信团队","微信支付","服务号","微信游戏","服务通知"]
 
-unread_pattern = r'\s\d+条未读\s'
+unread_pattern = r'\[\d+条\]'
 unnotice_pattern = r'\s\d{2}:\d{2}消息免打扰'
 
 def start_wx():
@@ -117,14 +117,12 @@ def exit_for_keyboard(event):#退出程序事件
 
 #检查是不是群聊
 def check_qun():
-    time.sleep(0.1)
     try:
-        chat_infomation = wx.GetChildren()[0].GetChildren()[0].GetChildren()[0]\
-        .GetChildren()[2].GetChildren()[1].GetChildren()[0].\
-        GetChildren()[0].GetChildren()[0].GetChildren()[0].GetChildren()[1].GetChildren()[1].GetChildren()[0].\
-        GetChildren()[0].GetChildren()[0].GetChildren()[0]
-    except IndexError:
-        return True
+        tool_bar = wx.ToolBarControl(AutomationId="tool_bar_accessible", timeout=0.5)
+        if tool_bar.ButtonControl(Name="视频号直播伴侣", timeout=0.1).Exists(0):
+            return True
+    except:
+        pass
     return False
     
     
@@ -164,8 +162,7 @@ print_good("查找到‘会话’控件：",hw)
 
 get_filehelper = False
 for filehelper in hw.GetChildren():
-    name = filehelper.Name.split(" ")[0]
-    if name == "文件传输助手":
+    if filehelper.AutomationId == "session_item_文件传输助手":
         get_filehelper = True
         print_good("找到文件传输助手:",filehelper)
         break
@@ -199,13 +196,18 @@ while not exit_status:
         we = hw.GetChildren()
         get_new_message = False
         for i in we:
-            if re.search(unread_pattern, i.Name):
-                get_new_message = True
-                newmessage = i
-                at_text = check_at()
-                if at_text:
-                    ated = True
-                break
+            if re.search(unread_pattern, i.Name) and i.AutomationId.startswith("session_item_"):
+                name_parts = i.Name.split('\n')
+                if len(name_parts) > 0:
+                    name_from_name = name_parts[0]
+                    name_from_automation = i.AutomationId.replace("session_item_", "")
+                    if name_from_name == name_from_automation:
+                        get_new_message = True
+                        newmessage = i
+                        at_text = check_at()
+                        if at_text:
+                            ated = True
+                        break
         if get_new_message: break
     #存在未读消息
     if ated or newmessage:
@@ -219,9 +221,7 @@ while not exit_status:
         we.Click(simulateMove=False)
         #读取当前聊天人的名字（扒控件累死我了）
         try:
-            user_name = wx.GetChildren()[0].GetChildren()[0].GetChildren()[0].GetChildren()[2].GetChildren()[1].GetChildren()[0].\
-            GetChildren()[0].GetChildren()[0].GetChildren()[0].GetChildren()[1].GetChildren()[1].GetChildren()[0].GetChildren()[0].\
-            GetChildren()[0].GetChildren()[0].Name
+            user_name = wx.TextControl(AutomationId="content_view.top_content_view.title_h_view.left_v_view.left_content_v_view.left_ui_.big_title_line_h_view").Name
         except:
             ps("非正常用户，跳过")
             filehelper.Click(simulateMove=False)
@@ -236,14 +236,12 @@ while not exit_status:
                 continue
 
         chat_info_button = wx.ButtonControl(Name="聊天信息")
-        chat_info_button.Click(simulateMove=False)
         #读取最后一条消息
-        last_msg = wx.ListControl(Name="消息").GetChildren()[-1].Name
+        last_msg = wx.ListControl(AutomationId="chat_message_list").GetChildren()[-1].Name
         last_msg = last_msg[:-2] #去除微信4.0的末尾换行符
         ps("读取最后一条消息:",last_msg)
         #判断是否来自于群聊
         qun = check_qun()
-        chat_info_button.Click(simulateMove=False)
         #如果是群聊
         if qun:
             if not ated:
@@ -266,7 +264,7 @@ while not exit_status:
         #先判断是否关闭
         reply = None
 
-        input_area = wx.EditControl(Name=user_name)
+        input_area = wx.EditControl(AutomationId="chat_input_field")
         input_area.Click(simulateMove=False)
 
         try: #防止没关先开
